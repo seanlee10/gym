@@ -7,16 +7,15 @@ import random as pr
 from gym import utils, spaces
 from gym.utils import seeding
 
-data = pd.read_csv("/Users/seanlee/gym/gym/envs/toy_text/TD.TO.csv", na_values=['null']).dropna(axis=0, how='any').reset_index()
+# data = pd.read_csv("/Users/seanlee/gym/gym/envs/toy_text/TD.TO.csv", na_values=['null']).dropna(axis=0, how='any').reset_index()
 # data = pd.DataFrame([5,6,7,8,9], columns=['Adj Close'])
-# data = pd.DataFrame([5,6,2,4,1], columns=['Adj Close'])
+data = pd.DataFrame([5,6,2,4,1], columns=['Adj Close'])
 
 class StockTraderEnv(gym.Env):
     def __init__(self):
         self.index = 0
         self.transactions = []
         self.action_space = spaces.Discrete(41)
-        # self.observation_space = spaces.Discrete(5)
         self.observation_space = spaces.Discrete(data.shape[0])
         self._seed()
 
@@ -28,6 +27,7 @@ class StockTraderEnv(gym.Env):
         return [seed]
 
     def _step(self, action):
+        action = action - 20
         if self._stock_count() < 1 and action > 1:
             action = pr.randint(-20, 0)
 
@@ -36,8 +36,6 @@ class StockTraderEnv(gym.Env):
 
         quotient = self.cash // adj_close
 
-
-        #
         if action > 0:
             shares = ((self._stock_count() * action * 5.) // 100)
         else:

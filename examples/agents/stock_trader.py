@@ -16,7 +16,7 @@ env = gym.make('StockTrader-v0')
 Q = np.zeros([env.observation_space.n, env.action_space.n])
 # Set learning parameters
 dis = .99
-num_episodes = 2000
+num_episodes = 40000
 
 # create lists to contain total rewards and steps per episode
 aList = []
@@ -35,19 +35,18 @@ for i in range(num_episodes):
     # The Q-Table learning algorithm
     while not done:
         # Choose an action by e greedy
-        # if np.random.rand(1) < e:
-        #     action = env.action_space.sample()
-        # else:
-        #     action = np.argmax(Q[state, :])
+        if np.random.rand(1) < e:
+            action = pr.randint(0, 40)
+        else:
+            action = np.argmax(Q[state, :])
 
         # action = env.action_space.sample()
-        action = pr.randint(-20, 20)
 
         # Get new state and reward from environment
         new_state, reward, done, _ = env.step(action)
 
         # Update Q-Table with new knowledge using learning rate
-        Q[state, action+20] = reward + dis * np.max(Q[new_state, :])
+        Q[state, action] = reward + dis * np.max(Q[new_state, :])
 
         rAll += reward
         state = new_state
@@ -56,7 +55,7 @@ for i in range(num_episodes):
 
     # print rewards
     # aList.append(int(reduce(lambda x, y: str(x)+str(y), actions), 3))
-    rList.append(rewards)
+    rList.append(rewards[-1])
     # np.diff(rList).append(0)
     # rewards = np.diff(rewards)
     # print actions
@@ -65,9 +64,9 @@ for i in range(num_episodes):
         # i = int(i)
         # Q[i, actions[i]] = r + dis * np.max(Q[i+1, :])
 
-#
+
 # arr_rewards = np.asarray(rList)
-# # print np.max(arr_rewards[:,4])
+# print arr_rewards
 # #
 # print aList[np.argmax(arr_rewards[:,4])]
 # print aList
@@ -81,15 +80,31 @@ for i in range(num_episodes):
 #     # print a
 #     Q[i, a] = r + dis * np.max(Q[i+1])
 
-
+# print rList
+print np.max(rList)
+# print np.argmax(rList)
 # print("Success rate: " + str(sum(rList) / num_episodes))
 # print("Final Q-Table Values")
-print(Q)
-plt.plot(Q[0], label='0')
-plt.plot(Q[1], label='1')
-plt.plot(Q[2], label='2')
-plt.plot(Q[3], label='3')
-plt.plot(Q[4], label='4')
+# print(Q)
+plt.plot(Q[0])
+plt.plot(Q[1])
+plt.plot(Q[2])
+plt.plot(Q[3])
+plt.plot(Q[4])
+print np.max(Q[0])
+print (np.argmax(Q[0]) - 20) * 5
+print np.max(Q[1])
+print (np.argmax(Q[1]) - 20) * 5
+print np.max(Q[2])
+print (np.argmax(Q[2]) - 20) * 5
+print np.max(Q[3])
+print (np.argmax(Q[3]) - 20) * 5
+print np.max(Q[4])
+print (np.argmax(Q[4]) - 20) * 5
+plt.legend(labels=['Day 1','Day 2','Day 3','Day 4','Day 5'])
 plt.show()
+
+# print "Reward: %.2f" % 0
+
 # plt.bar(range(len(rList)), rList, color="blue")
 # plt.show()
