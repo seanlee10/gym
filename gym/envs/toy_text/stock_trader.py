@@ -7,15 +7,17 @@ import random as pr
 from gym import utils, spaces
 from gym.utils import seeding
 
-# data = pd.read_csv("/Users/seanlee/ReinforcementZeroToAll/TD.TO.csv", na_values=['null']).dropna(axis=0, how='any').reset_index()
-data = pd.DataFrame([5,6,2,4,1], columns=['Adj Close'])
+data = pd.read_csv("/Users/seanlee/gym/gym/envs/toy_text/TD.TO.csv", na_values=['null']).dropna(axis=0, how='any').reset_index()
+# data = pd.DataFrame([5,6,7,8,9], columns=['Adj Close'])
+# data = pd.DataFrame([5,6,2,4,1], columns=['Adj Close'])
 
 class StockTraderEnv(gym.Env):
     def __init__(self):
         self.index = 0
         self.transactions = []
-        self.action_space = spaces.Discrete(3)
-        self.observation_space = spaces.Discrete(5)
+        self.action_space = spaces.Discrete(41)
+        # self.observation_space = spaces.Discrete(5)
+        self.observation_space = spaces.Discrete(data.shape[0])
         self._seed()
 
         # Start the first game
@@ -27,17 +29,30 @@ class StockTraderEnv(gym.Env):
 
     def _step(self, action):
         if self._stock_count() < 1 and action > 1:
-            action = pr.randint(0, 1)
-        reward = 0
-        choice = action - 1
-        actions = ['BUY', 'HOLD', 'SELL']
+            action = pr.randint(-20, 0)
+
         row = data.loc[self.index]
         adj_close = float(row['Adj Close'])
-        # print "%s %d" % (actions[action], adj_close)
 
-        self.cash += choice * adj_close
+        quotient = self.cash // adj_close
+
+
+        #
+        if action > 0:
+            shares = ((self._stock_count() * action * 5.) // 100)
+        else:
+            shares = ((quotient * action * 5.) // 100.)
+
+        # print self.cash
+        # print "%d %d%% %d x %d" % (action, action * 5, shares, adj_close)
+
+        self.cash += shares * adj_close
+
+        # print "cash: %.2f, stock: %.2f(%d)" % (self.cash, shares * adj_close, shares)
+
+        #self.cash += choice * adj_close
         self.index = self.index + 1
-        self.transactions.append([self.cash, choice])
+        self.transactions.append([self.cash, shares])
         if len(self.transactions) >= data.shape[0]:
             done = True
             self.index = 0
@@ -46,8 +61,9 @@ class StockTraderEnv(gym.Env):
 
         # row = data.tail(1)
         # print float(row['Adj Close'])
-        reward = (self.cash + self._stock_count() * float(row['Adj Close'])) - 10000
-
+        reward = (self.cash + self._stock_count() * adj_close) - 10000
+        # print "count: %d, reward: %.2f" % (self._stock_count(), reward)
+        # print "----------"
         # new_state = [self.cash, self._stock_count()]
         return self.index, reward, done, action
 
