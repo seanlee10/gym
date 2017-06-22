@@ -8,8 +8,8 @@ from gym import utils, spaces
 from gym.utils import seeding
 
 # data = pd.read_csv("/Users/seanlee/gym/gym/envs/toy_text/TD.TO.csv", na_values=['null']).dropna(axis=0, how='any').reset_index()
-# data = pd.DataFrame([5,6,7,8,9], columns=['Adj Close'])
-data = pd.DataFrame([5,6,2,4,1], columns=['Adj Close'])
+data = pd.DataFrame([5,6,7,8,9], columns=['Adj Close'])
+# data = pd.DataFrame([5,6,2,4,1], columns=['Adj Close'])
 
 class StockTraderEnv(gym.Env):
     def __init__(self):
@@ -59,11 +59,11 @@ class StockTraderEnv(gym.Env):
 
         # row = data.tail(1)
         # print float(row['Adj Close'])
-        reward = (self.cash + self._stock_count() * adj_close) - 10000
+        reward = ((self.cash + self._stock_count() * adj_close) - 10000)/10000
         # print "count: %d, reward: %.2f" % (self._stock_count(), reward)
         # print "----------"
         # new_state = [self.cash, self._stock_count()]
-        return self.index, reward, done, action
+        return self.index, (1 / (1 +np.exp(-reward))), done, action
 
     def _reset(self):
         self.transactions, self.cash = [], 10000

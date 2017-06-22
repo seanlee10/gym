@@ -16,7 +16,7 @@ env = gym.make('StockTrader-v0')
 Q = np.zeros([env.observation_space.n, env.action_space.n])
 # Set learning parameters
 dis = .99
-num_episodes = 40000
+num_episodes = 1000
 
 # create lists to contain total rewards and steps per episode
 aList = []
@@ -82,26 +82,27 @@ for i in range(num_episodes):
 
 # print rList
 print np.max(rList)
+plt.plot(rList)
 # print np.argmax(rList)
 # print("Success rate: " + str(sum(rList) / num_episodes))
 # print("Final Q-Table Values")
-# print(Q)
-plt.plot(Q[0])
-plt.plot(Q[1])
-plt.plot(Q[2])
-plt.plot(Q[3])
-plt.plot(Q[4])
-print np.max(Q[0])
-print (np.argmax(Q[0]) - 20) * 5
-print np.max(Q[1])
-print (np.argmax(Q[1]) - 20) * 5
-print np.max(Q[2])
-print (np.argmax(Q[2]) - 20) * 5
-print np.max(Q[3])
-print (np.argmax(Q[3]) - 20) * 5
-print np.max(Q[4])
-print (np.argmax(Q[4]) - 20) * 5
-plt.legend(labels=['Day 1','Day 2','Day 3','Day 4','Day 5'])
+print(Q)
+# plt.plot(Q[0])
+# plt.plot(Q[1])
+# plt.plot(Q[2])
+# plt.plot(Q[3])
+# plt.plot(Q[4])
+# print np.max(Q[0])
+# print (np.argmax(Q[0]) - 20) * 5
+# print np.max(Q[1])
+# print (np.argmax(Q[1]) - 20) * 5
+# print np.max(Q[2])
+# print (np.argmax(Q[2]) - 20) * 5
+# print np.max(Q[3])
+# print (np.argmax(Q[3]) - 20) * 5
+# print np.max(Q[4])
+# print (np.argmax(Q[4]) - 20) * 5
+# plt.legend(labels=['Day 1','Day 2','Day 3','Day 4','Day 5'])
 plt.show()
 
 # print "Reward: %.2f" % 0
