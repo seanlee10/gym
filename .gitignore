@@ -36,3 +36,4 @@ tutorial/*.html
 .idea
 vizdoom.ini
 examples/agents/gym-results
+*.jpg

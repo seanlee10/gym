@@ -3,14 +3,14 @@ import gym
 import random
 from gym import spaces
 import numpy as np
-from keras.datasets import cifar10, mnist, cifar100
-from keras.models import Sequential
-from keras.layers import Dense, Dropout, Activation, Flatten
-from keras.layers import Convolution2D, MaxPooling2D
-from keras.optimizers import SGD
-from keras.utils import np_utils
-from keras.regularizers import WeightRegularizer
-from keras import backend as K
+from mnist_simple.datasets import cifar10, mnist, cifar100
+from mnist_simple.models import Sequential
+from mnist_simple.layers import Dense, Dropout, Activation, Flatten
+from mnist_simple.layers import Convolution2D, MaxPooling2D
+from mnist_simple.optimizers import SGD
+from mnist_simple.utils import np_utils
+from mnist_simple.regularizers import WeightRegularizer
+from mnist_simple import backend as K
 
 from itertools import cycle
 import math
