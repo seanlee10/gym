@@ -1,10 +1,13 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.pyplot import gcf
 import math
 from collections import deque
 from random import randint
 import os
+import imageio
+from scipy.misc import imsave
 import random
 import itertools
 from os import path
@@ -47,17 +50,28 @@ while i < total_rows - window_size - 1:
 
     row = pd.Series([str(i) + '.jpg', label])
     csv = csv.append(row, ignore_index=True)
+    data = list(map(normalize, window))
 
+    figure = np.zeros((101, 25, 3), dtype=np.uint8)
+    # print(np.asarray(data))
+    for idx, v in enumerate(data):
+        figure[int(round(v * 100)), idx] = 255
+
+    # print(figure)
+    # print(figure.shape)
+
+    # imageio.imwrite(IMG_DIR + str(i) + '.jpg', figure)
+    plt.imsave(IMG_DIR + str(i) + '.jpg', np.flip(figure, 0))
+    # print(type(list(map(normalize, window))))
+    # line_plot = pd.DataFrame(list(map(normalize, window)))
     #
-
-    # print(list(map(normalize, window)))
-
-    line_plot = pd.DataFrame(list(map(normalize, window)))
-
-    line_plot.plot(kind='line', legend=False)
-    plt.axis('off')
-    # plt.show()
-    plt.savefig(IMG_DIR + str(i) + '.jpg', bbox_inches='tight', pad_inches=0)
+    # line_plot.plot(kind='line', legend=False)
+    # plt.axis('off')
+    # fig = plt.gcf()
+    # fig.set_size_inches(.5, .5)
+    # fig.set_canvas()
+    # fig.set_clip_box()
+    # plt.savefig(IMG_DIR + str(i) + '-0.jpg', bbox_inches='tight', pad_inches=0)
 
     i += 1
 
